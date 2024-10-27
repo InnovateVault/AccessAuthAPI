@@ -2,6 +2,7 @@
 using AccessAuthAPI.Models;
 using AccessAuthAPI.Repositories;
 using AccessAuthAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccessAuthAPI.Controllers
@@ -48,5 +49,19 @@ namespace AccessAuthAPI.Controllers
             var token = _tokenService.GenerateJwtToken(user);
             return Ok(new { Token = token });
         }
+
+        [HttpGet("profile")]
+        [Authorize] 
+        public async Task<IActionResult> GetProfile()
+        {
+            var userName = User.Identity.Name;
+            var user = await _userRepository.GetUserByUsernameAsync(userName);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            return Ok(user);
+        }
+
     }
 }

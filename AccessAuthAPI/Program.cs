@@ -1,11 +1,14 @@
 using AccessAuthAPI.Data;
 using AccessAuthAPI.Repositories;
+using AccessAuthAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UserAuthAPI.Repositories;
 
+
+// Create the builder
 var builder = WebApplication.CreateBuilder(args);
 
 // Load environment variables
@@ -39,3 +42,20 @@ builder.Services.AddAuthorization(options =>
 
 // Register services and repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Register controllers
+builder.Services.AddControllers();
+
+// Build the app
+var app = builder.Build();
+
+// Configure middleware
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Configure endpoints
+app.MapControllers();
+
+// Run the app
+app.Run();

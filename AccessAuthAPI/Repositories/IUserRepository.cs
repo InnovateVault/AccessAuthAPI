@@ -10,5 +10,6 @@ namespace AccessAuthAPI.Repositories
         Task<User> GetUserByIdAsync(int id);
         Task DeleteUserAsync(User user);
         Task SaveChangesAsync();
+        Task UpdateUserAsync(User user);
     }
 }
